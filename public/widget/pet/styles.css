@@ -1,0 +1,284 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Completely transparent, click-through 1920x1080 canvas */
+html, body {
+    width: 1920px;
+    height: 1080px;
+    background: transparent !important;
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- The Dog Container --- */
+.dog-wrapper {
+    position: absolute;
+    bottom: 100px;
+    left: 860px;
+    width: 140px;
+    height: 120px;
+    transition: left 0.8s linear, bottom 0.8s linear, transform 0.3s ease;
+    transform-origin: center bottom;
+    z-index: 999999;
+}
+
+.dog {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Custom CSS Vector Art --- */
+
+.dog-body {
+    position: absolute;
+    bottom: 30px;
+    left: 35px;
+    width: 80px;
+    height: 48px;
+    background: #161616;
+    border-radius: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease; /* Ensure transitions are smooth on the body too */
+}
+
+.dog-chest-patch {
+    position: absolute;
+    top: 6px;
+    left: -2px;
+    width: 12px;
+    height: 18px;
+    background: #fbf6f0;
+    border-radius: 50% 20% 20% 50%;
+    transform: rotate(15deg);
+}
+
+.dog-collar {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    width: 14px;
+    height: 32px;
+    background: #c0292b;
+    border-radius: 6px;
+    transform: translateX(15px) translateY(3px) rotate(40deg);
+    z-index: 5;
+}
+
+.dog-tag {
+    position: absolute;
+    bottom: -4px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: #bdc3c7;
+    border-radius: 50%;
+}
+
+.dog-head {
+    position: absolute;
+    top: -32px;
+    left: -24px;
+    width: 44px;
+    height: 44px;
+    background: #161616;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.dog-snout {
+    position: absolute;
+    top: 16px;
+    left: -12px;
+    width: 26px;
+    height: 20px;
+    background: #c58b53;
+    border-radius: 40% 50% 50% 40%;
+}
+
+.dog-nose {
+    position: absolute;
+    top: 2px;
+    left: -2px;
+    width: 8px;
+    height: 6px;
+    background: #0a0a0a;
+    border-radius: 40%;
+}
+
+.dog-eye {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    width: 7px;
+    height: 7px;
+    background: #0a0a0a;
+    border-radius: 50%;
+}
+
+.dog-eyebrow {
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    width: 8px;
+    height: 5px;
+    background: #c58b53;
+    border-radius: 50%;
+}
+
+.dog-ear {
+    position: absolute;
+    top: -22px;
+    left: 16px;
+    width: 18px;
+    height: 32px;
+    background: #161616;
+    border-radius: 80% 20% 50% 40%;
+    transform: rotate(-10deg);
+    transform-origin: bottom center;
+}
+
+.dog-ear.inner {
+    width: 11px;
+    height: 24px;
+    background: #ba7960;
+    top: -15px;
+    left: 20px;
+    border-radius: 80% 20% 50% 40%;
+}
+
+.dog-tail {
+    position: absolute;
+    top: -4px;
+    right: -10px;
+    width: 14px;
+    height: 30px;
+    background: #161616;
+    border-radius: 40% 40% 0 40%;
+    transform-origin: left bottom;
+    transform: rotate(35deg);
+}
+
+.leg {
+    position: absolute;
+    bottom: -18px;
+    width: 9px;
+    height: 26px;
+    background: #161616;
+    transform-origin: top center;
+    transition: transform 0.3s ease;
+}
+
+.leg .tan-sock {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 12px;
+    background: #c58b53;
+    border-radius: 0 0 3px 3px;
+}
+
+.leg.front-left  { left: 12px; z-index: 2; }
+.leg.front-right { left: 24px; background: #0a0a0a; z-index: -1; }
+.leg.front-right .tan-sock { background: #a67341; }
+
+.leg.back-left   { right: 16px; z-index: 2; }
+.leg.back-right  { right: 6px; background: #0a0a0a; z-index: -1; }
+.leg.back-right .tan-sock { background: #a67341; }
+
+/* --- Animation States & Behaviors --- */
+.face-right {
+    transform: scaleX(-1);
+}
+
+.face-left {
+    transform: scaleX(1);
+}
+
+.walking .leg.front-left { animation: march 0.3s infinite alternate ease-in-out; }
+.walking .leg.front-right { animation: march 0.3s infinite alternate-reverse ease-in-out; }
+.walking .leg.back-left { animation: march 0.3s infinite alternate-reverse ease-in-out; }
+.walking .leg.back-right { animation: march 0.3s infinite alternate ease-in-out; }
+
+@keyframes march {
+    0% { transform: rotate(-28deg); }
+    100% { transform: rotate(28deg); }
+}
+
+.walking .dog-body { animation: bob 0.15s infinite alternate ease-in-out; }
+
+@keyframes bob {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-3px); }
+}
+
+.walking .dog-tail { animation: wag 0.12s infinite alternate ease-in-out; }
+
+@keyframes wag {
+    0% { transform: rotate(25deg); }
+    100% { transform: rotate(50deg); }
+}
+
+.sniffing .dog-head { animation: sniff 0.2s infinite alternate ease-in-out; }
+
+@keyframes sniff {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(18deg) translateY(4px); }
+}
+
+/* Sitting State */
+.sitting .dog {
+    transform: translateY(10px);
+}
+
+.sitting .dog-body {
+    bottom: 20px;
+    height: 40px;
+    border-radius: 26px 26px 20px 18px;
+    transform: translateY(6px);
+}
+
+.sitting .dog-head {
+    top: -30px;
+    transform: rotate(-6deg) translateY(-1px);
+}
+
+.sitting .dog-tail {
+    top: 2px;
+    right: -8px;
+    height: 24px;
+    transform: rotate(12deg);
+    animation: sit-wag 0.7s infinite alternate ease-in-out;
+}
+
+.sitting .leg {
+    animation: none;
+}
+
+.sitting .leg.front-left {
+    height: 20px;
+    transform: rotate(14deg) translateX(-1px) translateY(-2px);
+}
+
+.sitting .leg.front-right {
+    height: 18px;
+    transform: rotate(8deg) translateY(-1px);
+}
+
+.sitting .leg.back-left {
+    height: 18px;
+    transform: rotate(-58deg) translateX(2px) translateY(3px);
+}
+
+.sitting .leg.back-right {
+    height: 16px;
+    transform: rotate(-48deg) translateX(1px) translateY(4px);
+}
+
+@keyframes sit-wag {
+    0% { transform: rotate(8deg); }
+    100% { transform: rotate(28deg); }
+}

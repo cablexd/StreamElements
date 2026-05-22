@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Overlay</title>
+    <!-- Use Font Awesome for platform icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0); /* Transparent for stream */
+        }
+
+        #chat-container {
+            width: 100%;
+            height: 100vh; /* Set to viewport height */
+            max-width: 400px; /* Streamlabs style profile width */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 10px;
+            overflow: hidden; 
+        }
+
+        .chat-message {
+            background-color: rgba(0, 0, 0, 0.6); /* Streamlabs style dark glass message capsule */
+            color: #eeeeee;
+            padding: 6px 10px;
+            margin-top: 4px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            
+            /* Animation for incoming streamlabs look */
+            opacity: 0;
+            animation: fadeInSlideUp 0.3s ease-out forwards;
+        }
+
+        /* Platform Icons */
+        .platform-icon {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        .icon-twitch {
+            color: #9146ff;
+        }
+
+        .icon-youtube {
+            color: #ff0000;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #55c7ff; /* Fallback Streamlabs username color */
+            margin-right: 4px;
+        }
+
+        .message-text {
+            color: #ffffff;
+        }
+
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container"></div>
+
+    <!-- Reverted back exactly to your original script path -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const container = document.getElementById('chat-container')
+        const socket = io() // Reverted back exactly to your original constructor
+
+        function addMessage({ platform, username, message, color }) {
+            const messageElement = document.createElement('div')
+            messageElement.classList.add('chat-message')
+
+            // Handle platform icon injection dynamically based on platform payload property
+            if (platform) {
+                const iconSpan = document.createElement('span')
+                iconSpan.classList.add('platform-icon')
+                
+                if (platform.toLowerCase() === 'twitch') {
+                    iconSpan.classList.add('fab', 'fa-twitch', 'icon-twitch')
+                } else if (platform.toLowerCase() === 'youtube') {
+                    iconSpan.classList.add('fab', 'fa-youtube', 'icon-youtube')
+                }
+                messageElement.appendChild(iconSpan)
+            }
+
+            // Username
+            const usernameSpan = document.createElement('span')
+            usernameSpan.classList.add('username')
+            usernameSpan.textContent = `${username}`
+            if (color) {
+                usernameSpan.style.color = color
+            } else {
+                usernameSpan.style.color = '#B2071D';
+            }
+            messageElement.appendChild(usernameSpan)
+
+            // Colon separator
+            const separatorSpan = document.createElement('span')
+            separatorSpan.classList.add('message-text')
+            separatorSpan.textContent = ': '
+            messageElement.appendChild(separatorSpan)
+
+            // Message Body
+            const messageSpan = document.createElement('span')
+            messageSpan.classList.add('message-text')
+            messageSpan.textContent = message
+            messageElement.appendChild(messageSpan)
+
+            container.appendChild(messageElement)
+            container.scrollTop = container.scrollHeight;
+
+            setTimeout(() => {
+                messageElement.style.transition = 'opacity 0.5s ease'
+                messageElement.style.opacity = '0'
+                setTimeout(() => messageElement.remove(), 500)
+            }, 60 * 1000)
+        }
+
+        socket.on('message', addMessage)
+    </script>
+</body>
+</html>

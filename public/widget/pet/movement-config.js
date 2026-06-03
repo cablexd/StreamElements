@@ -4,7 +4,7 @@
  * Pass partial overrides to createMovementConfig() from main.js if needed.
  */
 
-const OFFSCREEN_SPACE = 400 // amount it's allowed to go offscreen
+const OFFSCREEN_SPACE = 600 // amount it's allowed to go offscreen
 
 export const PET_MOVEMENT_CONFIG = {
     /** DOM id of the wrapper element (without #) */

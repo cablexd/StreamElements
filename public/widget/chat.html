@@ -127,11 +127,12 @@
             container.appendChild(messageElement)
             container.scrollTop = container.scrollHeight;
 
+            const DURATION = 3 * 60 // seconds
             setTimeout(() => {
                 messageElement.style.transition = 'opacity 0.5s ease'
                 messageElement.style.opacity = '0'
                 setTimeout(() => messageElement.remove(), 500)
-            }, 60 * 1000)
+            }, DURATION * 1000)
         }
 
         socket.on('message', addMessage)
